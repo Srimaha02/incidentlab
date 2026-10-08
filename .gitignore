@@ -7,3 +7,8 @@ db.sqlite3
 staticfiles/
 .vscode/
 .idea/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
