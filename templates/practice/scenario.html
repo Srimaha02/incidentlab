@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ scenario.title }} | IncidentLab
+{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'home' %}">← Back to incidents</a>
+
+<h1>{{ scenario.title }}</h1>
+
+<p>{{ scenario.briefing }}</p>
+
+<div class="card">
+    <h2>Logs</h2>
+    <pre>{{ scenario.artifacts.logs }}</pre>
+</div>
+
+<div class="card">
+    <h2>Metrics</h2>
+    <pre>{{ scenario.artifacts.metrics }}</pre>
+</div>
+
+<div class="card">
+    <h2>Configuration</h2>
+    <pre>{{ scenario.artifacts.config }}</pre>
+</div>
+
+<div class="card">
+    <h2>What would you do?</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for option in scenario.options %}
+        <label class="option">
+            <input
+                type="radio"
+                name="option"
+                value="{{ option.id }}"
+                required
+            >
+
+            {{ option.text }}
+        </label>
+        {% endfor %}
+
+        <button
+            class="button"
+            type="submit"
+            name="action"
+            value="answer"
+        >
+            Submit Answer
+        </button>
+    </form>
+</div>
+
+<div class="card">
+
+    <h2>Need a hint?</h2>
+
+    {% if state.hints_used > 0 %}
+
+        <h3>Hints</h3>
+
+        <ul>
+            {% for hint in scenario.hints %}
+                {% if forloop.counter <= state.hints_used %}
+                    <li>{{ hint }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+
+    {% if state.hints_used < scenario.hints|length %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <button
+                class="button secondary"
+                type="submit"
+                name="action"
+                value="hint"
+            >
+                Show Hint (-25 pts)
+            </button>
+        </form>
+
+    {% else %}
+
+        <p>No more hints.</p>
+
+    {% endif %}
+
+</div>
+
+{% if state.answered %}
+
+<div class="card">
+
+    <h2>Result</h2>
+
+    <p>
+        Current score:
+        <strong>{{ score }}</strong>
+    </p>
+
+    <h3>Explanation</h3>
+    <p>{{ scenario.explanation }}</p>
+
+    <h3>Lesson</h3>
+    <p>{{ scenario.lesson }}</p>
+
+    {% if next_scenario %}
+    <a
+        class="button"
+        href="{% url 'scenario' next_scenario %}"
+    >
+        Next Incident →
+    </a>
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}

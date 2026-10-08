@@ -1,0 +1,50 @@
+{
+  "slug": "health-check-301",
+  "title": "App works in the browser, targets are unhealthy",
+  "difficulty": "medium",
+  "category": "django",
+  "briefing": "After enabling HTTPS hardening, the site loads fine for users but the load balancer targets become unhealthy.",
+  "artifacts": {
+    "logs": "ALB target health checks are failing with HTTP 301 redirects.",
+    "metrics": {
+      "labels": ["t-4", "t-3", "t-2", "t-1", "now"],
+      "series": {
+        "healthy_hosts": [2, 1, 2, 0, 1],
+        "http_3xx": [5, 40, 38, 60, 55]
+      }
+    },
+    "config": "# settings.py\\nSECURE_SSL_REDIRECT = True"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Make the health endpoint exempt from the HTTPS redirect",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Turn SECURE_SSL_REDIRECT off permanently",
+      "correct": false,
+      "why_wrong": "This removes a real protection. The goal is to keep HTTPS and make the health check work."
+    },
+    {
+      "id": "c",
+      "text": "Add more instances behind the load balancer",
+      "correct": false,
+      "why_wrong": "Every instance fails the same health check."
+    },
+    {
+      "id": "d",
+      "text": "Restart nginx on every instance",
+      "correct": false,
+      "why_wrong": "This is a configuration issue, not a stuck process."
+    }
+  ],
+  "explanation": "The health check uses plain HTTP and expects 200. With SECURE_SSL_REDIRECT enabled, Django redirects it to HTTPS and returns 301.",
+  "lesson": "Redirects count as health-check failures. Keep the health endpoint reachable over plain HTTP.",
+  "hints": [
+    "What status code does the health check actually get?",
+    "Which Django setting redirects HTTP requests to HTTPS?"
+  ],
+  "points": 150
+}

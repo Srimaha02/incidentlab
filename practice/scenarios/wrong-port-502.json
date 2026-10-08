@@ -1,0 +1,54 @@
+{
+  "slug": "wrong-port-502",
+  "title": "502 right after the deploy",
+  "difficulty": "easy",
+  "category": "beanstalk",
+  "briefing": "Users see 502 Bad Gateway since the 14:05 deploy. Environment health turns red.",
+  "artifacts": {
+    "logs": "nginx error.log shows connection refused to the application.",
+    "metrics": {
+      "labels": ["14:02", "14:04", "14:06", "14:08", "14:10"],
+      "series": {
+        "http_5xx": [0, 0, 3, 120, 240],
+        "cpu_percent": [18, 20, 19, 6, 5]
+      },
+      "units": {
+        "cpu_percent": "%"
+      }
+    },
+    "config": "# Procfile (new in this release)\\nweb: gunicorn --bind :5000 --workers 2 config.wsgi:application"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Make gunicorn bind to port 8000 in the Procfile and redeploy",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Upgrade the instance type to get more CPU",
+      "correct": false,
+      "why_wrong": "CPU is low, not high. The error says connection refused."
+    },
+    {
+      "id": "c",
+      "text": "Open port 5000 in the instance security group",
+      "correct": false,
+      "why_wrong": "nginx and gunicorn are on the same machine, so security groups are not the issue."
+    },
+    {
+      "id": "d",
+      "text": "Increase the load balancer idle timeout",
+      "correct": false,
+      "why_wrong": "Idle timeouts cause slow responses (504), not an immediate connection refusal (502)."
+    }
+  ],
+  "explanation": "The application is not listening on the port expected by the reverse proxy. The Procfile binds gunicorn to port 5000, while the Beanstalk Python platform expects the application on port 8000.",
+  "lesson": "Compare the port in the nginx error with the port configured in the Procfile. A connection refused usually means the proxy reached the host but nothing is listening on that port.",
+  "hints": [
+    "Look at the port in the nginx error.",
+    "Compare it with the port in the gunicorn command.",
+    "Which port does the Beanstalk Python platform proxy to by default?"
+  ],
+  "points": 100
+}

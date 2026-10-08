@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}DeployDoctor | IncidentLab{% endblock %}
+
+{% block content %}
+
+<div class="doctor-header">
+    <h1>DeployDoctor</h1>
+    <p class="muted">
+        Paste a deployment configuration and find common production issues.
+    </p>
+</div>
+
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="kind">
+            <strong>File type</strong>
+        </label>
+
+        <select name="kind" id="kind">
+            <option value="">Auto-detect</option>
+
+            <option value="dockerfile"
+                {% if kind == "dockerfile" %}selected{% endif %}>
+                Dockerfile
+            </option>
+
+            <option value="procfile"
+                {% if kind == "procfile" %}selected{% endif %}>
+                Procfile
+            </option>
+
+            <option value="settings"
+                {% if kind == "settings" %}selected{% endif %}>
+                Django settings
+            </option>
+
+            <option value="ebextensions"
+                {% if kind == "ebextensions" %}selected{% endif %}>
+                Elastic Beanstalk config
+            </option>
+        </select>
+
+        <label for="text">
+            <strong>Configuration</strong>
+        </label>
+
+        <textarea
+            name="text"
+            id="text"
+            rows="18"
+            placeholder="Paste your Dockerfile, Procfile, settings.py, or .ebextensions config here..."
+        >{{ text }}</textarea>
+
+        <button class="button" type="submit">
+            Analyze Configuration
+        </button>
+    </form>
+</div>
+
+{% if summary %}
+<div class="card">
+    <h2>Summary</h2>
+
+    <p>{{ summary }}</p>
+
+    {% if kind %}
+    <p>
+        Detected type:
+        <strong>{{ kind }}</strong>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if findings %}
+
+<h2>Findings</h2>
+
+{% for finding in findings %}
+
+<div class="card finding {{ finding.severity }}">
+
+    <div class="card-header">
+        <span class="badge">
+            {{ finding.severity|upper }}
+        </span>
+
+        <span class="points">
+            {{ finding.rule_id }}
+        </span>
+    </div>
+
+    <h3>{{ finding.title }}</h3>
+
+    {% if finding.line %}
+    <p>
+        <strong>Line:</strong>
+        {{ finding.line }}
+    </p>
+    {% endif %}
+
+    <h4>Why?</h4>
+    <p>{{ finding.why }}</p>
+
+    <h4>Fix</h4>
+    <p>{{ finding.fix }}</p>
+
+</div>
+
+{% endfor %}
+
+{% elif kind and text %}
+
+<div class="card">
+    <h2>✅ No issues found</h2>
+
+    <p>
+        The deterministic rules did not find any known problems.
+    </p>
+</div>
+
+{% endif %}
+
+{% if ai_result %}
+
+<div class="card">
+    <h2>🤖 AI Explanation</h2>
+    <p>{{ ai_result.summary }}</p>
+</div>
+
+{% for row in finding_rows %}
+
+    {% if row.ai_text %}
+
+    <div class="card">
+
+        <div class="card-header">
+            <strong>{{ row.finding.rule_id }}</strong>
+        </div>
+
+        <h3>AI Explanation</h3>
+
+        <p>{{ row.ai_text }}</p>
+
+    </div>
+
+    {% endif %}
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

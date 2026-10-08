@@ -1,0 +1,52 @@
+{
+  "slug": "oom-workers",
+  "title": "Random 502s when traffic grows",
+  "difficulty": "medium",
+  "category": "performance",
+  "briefing": "Everything is fine at night. During the day users get intermittent 502s.",
+  "artifacts": {
+    "logs": "web.stdout.log shows workers being killed as memory usage grows.",
+    "metrics": {
+      "labels": ["10:00", "10:30", "11:00", "11:30", "12:00"],
+      "series": {
+        "memory_percent": [48, 63, 81, 94, 96],
+        "cpu_percent": [22, 31, 38, 41, 40],
+        "http_5xx": [0, 1, 6, 30, 44]
+      }
+    },
+    "config": "# Procfile\\nweb: gunicorn --bind :8000 --workers 6 config.wsgi:application"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Reduce the number of gunicorn workers and/or move to a larger instance",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Raise the health check interval so fewer checks hit the app",
+      "correct": false,
+      "why_wrong": "Health checks are tiny. The memory graph shows saturation."
+    },
+    {
+      "id": "c",
+      "text": "Restart nginx every hour with a cron job",
+      "correct": false,
+      "why_wrong": "The killed processes are workers, not nginx. This only hides the symptom."
+    },
+    {
+      "id": "d",
+      "text": "Add a second listener to the load balancer",
+      "correct": false,
+      "why_wrong": "More listeners do not add memory to the instance."
+    }
+  ],
+  "explanation": "Six gunicorn workers on a small instance use almost all available RAM. When memory is exhausted, workers are killed and requests become 502s.",
+  "lesson": "Worker count is a memory decision. More workers can improve concurrency but can also exhaust RAM.",
+  "hints": [
+    "Look at the memory graph and the SIGKILL message together.",
+    "How many workers are configured?",
+    "Workers multiplied by memory usage must fit in RAM."
+  ],
+  "points": 150
+}

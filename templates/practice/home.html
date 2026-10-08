@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Practice | IncidentLab{% endblock %}
+
+{% block content %}
+
+<h1>Incident Practice</h1>
+
+<p class="muted">
+    Choose an incident and diagnose what went wrong.
+</p>
+
+<div class="scenario-grid">
+
+    {% for scenario in scenarios %}
+
+    <article class="card">
+
+        <div class="card-header">
+            <span class="badge">
+                {{ scenario.difficulty|title }}
+            </span>
+
+            <span class="points">
+                {{ scenario.points }} pts
+            </span>
+        </div>
+
+        <h2>{{ scenario.title }}</h2>
+
+        <p>{{ scenario.briefing }}</p>
+
+        <a
+            class="button"
+            href="{% url 'scenario' scenario.slug %}"
+        >
+            Start Incident
+        </a>
+
+    </article>
+
+    {% empty %}
+
+    <p>No scenarios found.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

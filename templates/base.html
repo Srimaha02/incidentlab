@@ -1,0 +1,42 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}IncidentLab{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<header class="top">
+    <a class="brand" href="{% url 'home' %}">
+        Incident<span>Lab</span>
+    </a>
+
+<nav>
+    <a href="{% url 'home' %}">Practice</a>
+    <a href="{% url 'doctor_home' %}">DeployDoctor</a>
+</nav>
+</header>
+
+<main class="wrap">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer>
+    <p>
+        Practice real production incidents with zero cloud cost.
+    </p>
+
+    {% block scripts %}
+    {% endblock %}
+</footer>
+
+</body>
+</html>

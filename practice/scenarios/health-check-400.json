@@ -1,0 +1,50 @@
+{
+  "slug": "health-check-400",
+  "title": "Instances unhealthy: 400 on health check",
+  "difficulty": "easy",
+  "category": "django",
+  "briefing": "A new environment came up, but every instance is Unhealthy and visitors cannot reach the app.",
+  "artifacts": {
+    "logs": "ALB target health check is failing with HTTP 400.",
+    "metrics": {
+      "labels": ["t-4", "t-3", "t-2", "t-1", "now"],
+      "series": {
+        "healthy_hosts": [0, 0, 0, 0, 0],
+        "http_4xx": [10, 22, 25, 24, 26]
+      }
+    },
+    "config": "# settings.py\\nDEBUG = True\\nALLOWED_HOSTS = ['myapp.example.com']"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Configure ALLOWED_HOSTS so it also accepts the Host header used by the health check",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Set DEBUG = True so the health check passes",
+      "correct": false,
+      "why_wrong": "DEBUG does not bypass Host validation."
+    },
+    {
+      "id": "c",
+      "text": "Change the health check path to /",
+      "correct": false,
+      "why_wrong": "The path is fine; the request is rejected before routing because of Host validation."
+    },
+    {
+      "id": "d",
+      "text": "Increase the health check timeout",
+      "correct": false,
+      "why_wrong": "The application is responding instantly with 400, so waiting longer changes nothing."
+    }
+  ],
+  "explanation": "The load balancer health checker sends a Host header that Django rejects because it is not present in ALLOWED_HOSTS.",
+  "lesson": "A 4xx on a health check means the app was reached but rejected the request.",
+  "hints": [
+    "Look at the exact Host header in the health-check request.",
+    "Which Django setting validates the Host header?"
+  ],
+  "points": 100
+}
