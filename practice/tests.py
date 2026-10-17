@@ -10,7 +10,7 @@ class LoaderTests(SimpleTestCase):
     def test_all_scenarios_loaded(self):
         scenarios = all_scenarios()
 
-        self.assertEqual(len(scenarios), 5)
+        self.assertGreaterEqual(len(scenarios), 5)
 
     def test_required_scenario_exists(self):
         scenario = get_scenario("wrong-port-502")
@@ -101,3 +101,5 @@ class PracticeViewTests(SimpleTestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+

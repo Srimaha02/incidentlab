@@ -177,3 +177,390 @@ textarea {
 .finding.low {
     border-left: 5px solid #777;
 }
+
+/* ===== INCIDENTLAB: DEVOPS CYBER THEME ===== */
+
+:root {
+    --bg: #080d18;
+    --fg: #e2f3ff;
+    --muted: #91a8bd;
+    --card: #111c2d;
+    --line: #263b50;
+    --brand: #00e5ff;
+    --accent: #39ff88;
+}
+
+body {
+    background:
+        radial-gradient(ellipse at top, #12283b 0%, #080d18 65%);
+    color: var(--fg);
+    min-height: 100vh;
+}
+
+.top {
+    background: rgba(8, 13, 24, 0.96);
+    border-bottom: 1px solid #00e5ff55;
+    box-shadow: 0 4px 24px #00e5ff0b;
+}
+
+.brand {
+    color: #00e5ff;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 14px #00e5ff44;
+}
+
+.brand span {
+    color: #39ff88;
+}
+
+nav a {
+    color: #c8dbea;
+    transition: color 0.2s ease;
+}
+
+nav a:hover {
+    color: #39ff88;
+}
+
+.wrap {
+    width: min(1100px, 92%);
+}
+
+.card {
+    background: linear-gradient(145deg, #142236, #0e1726);
+    border: 1px solid #263f56;
+    border-radius: 14px;
+    box-shadow: 0 8px 28px #00000025;
+    transition: border-color 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.scenario-grid .card:hover {
+    transform: translateY(-4px);
+    border-color: #00e5ff88;
+    box-shadow: 0 10px 30px #00e5ff12;
+}
+
+.button {
+    background: #00bcd4;
+    color: #041018;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: background 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
+}
+
+.button:hover {
+    background: #39ff88;
+    box-shadow: 0 0 18px #39ff8844;
+    transform: translateY(-1px);
+}
+
+.button.secondary {
+    background: #183b4d;
+    color: #39ff88;
+    border: 1px solid #39ff8866;
+}
+
+.badge {
+    background: #163344;
+    color: #39ff88;
+    border: 1px solid #39ff8840;
+}
+
+.points {
+    color: #8ba8bf;
+}
+
+.option {
+    background: #101b2b;
+    border-color: #2b435a;
+    color: #e2f3ff;
+    transition: border-color 0.2s ease,
+                background 0.2s ease;
+}
+
+.option:hover {
+    background: #162a3d;
+    border-color: #00e5ff;
+}
+
+pre {
+    background: #070c13;
+    color: #9dffb5;
+    border: 1px solid #253c4d;
+    border-radius: 10px;
+    font-family: Consolas, "Courier New", monospace;
+    line-height: 1.7;
+}
+
+select,
+textarea {
+    background: #0b1422;
+    color: #e2f3ff;
+    border-color: #2b435a;
+}
+
+select:focus,
+textarea:focus {
+    outline: 2px solid #00e5ff66;
+    border-color: #00e5ff;
+}
+
+.finding.high {
+    border-left-color: #ff5268;
+}
+
+.finding.medium {
+    border-left-color: #ffbd4a;
+}
+
+.finding.low {
+    border-left-color: #39ff88;
+}
+
+footer {
+    color: #91a8bd;
+}
+
+::selection {
+    background: #00e5ff55;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .top {
+        padding: 14px 16px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        margin-left: 12px;
+    }
+
+    .scenario-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 18px;
+    }
+}
+
+/* ===== CYBER COMMAND CENTER ===== */
+
+.cyber-hero {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 28px;
+    align-items: center;
+    padding: 34px 0 24px;
+}
+
+.terminal-label {
+    color: #39ff88;
+    font: 700 0.76rem Consolas, monospace;
+    letter-spacing: 1.5px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #39ff88;
+    box-shadow: 0 0 10px #39ff8877;
+}
+
+.cyber-hero h1 {
+    margin: 20px 0 14px;
+    font-size: clamp(2.3rem, 5vw, 4rem);
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+}
+
+.cyber-hero h1 span {
+    color: #39ff88;
+    text-shadow: 0 0 22px #39ff8822;
+}
+
+.hero-content > p {
+    max-width: 520px;
+    line-height: 1.8;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.terminal-panel {
+    overflow: hidden;
+    border: 1px solid #00e5ff55;
+    border-radius: 12px;
+    background: #070c13;
+    box-shadow: 0 0 35px #00e5ff0c;
+}
+
+.terminal-top {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 13px 16px;
+    background: #111c2d;
+    border-bottom: 1px solid #263b50;
+    color: #ff6378;
+    font-size: 0.75rem;
+}
+
+.terminal-top span:nth-child(2) { color: #ffca58; }
+.terminal-top span:nth-child(3) { color: #39ff88; }
+
+.terminal-name {
+    margin-left: auto;
+    color: #91a8bd;
+    font-family: Consolas, monospace;
+}
+
+.terminal-body {
+    padding: 20px;
+    font: 0.85rem/1.9 Consolas, monospace;
+}
+
+.terminal-body p {
+    overflow-wrap: anywhere;
+}
+
+.terminal-prompt { color: #00e5ff; }
+.terminal-green { color: #39ff88; }
+.terminal-cyan { color: #00e5ff; }
+.terminal-cursor { color: #39ff88; }
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 24px 0 48px;
+}
+
+.stat-card {
+    padding: 20px;
+    background: #111c2d;
+    border: 1px solid #263b50;
+    border-radius: 12px;
+}
+
+.stat-icon {
+    color: #00e5ff;
+    font-size: 1.4rem;
+}
+
+.stat-card > p {
+    margin: 10px 0;
+    font: 0.72rem Consolas, monospace;
+    letter-spacing: 1px;
+}
+
+.stat-card strong {
+    display: block;
+    color: #39ff88;
+    font: 700 1.65rem Consolas, monospace;
+}
+
+.stat-note {
+    display: block;
+    margin-top: 8px;
+    color: #91a8bd;
+    font-size: 0.82rem;
+}
+
+.incident-section {
+    padding-bottom: 24px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.section-heading h2 {
+    margin-bottom: 4px;
+}
+
+.scenario-count {
+    padding: 8px 10px;
+    color: #00e5ff;
+    border: 1px solid #00e5ff44;
+    border-radius: 6px;
+    font: 0.72rem Consolas, monospace;
+    white-space: nowrap;
+}
+
+.incident-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    margin: 0;
+}
+
+.incident-index {
+    margin-top: 22px;
+    color: #00e5ff;
+    font: 0.75rem Consolas, monospace;
+}
+
+.incident-card h3 {
+    margin: 12px 0;
+    font-size: 1.25rem;
+}
+
+.incident-briefing {
+    flex: 1;
+    color: #b7c9d9;
+    line-height: 1.75;
+}
+
+.incident-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #263b50;
+}
+
+.case-status {
+    color: #91a8bd;
+    font: 0.68rem Consolas, monospace;
+}
+
+@media (max-width: 760px) {
+    .cyber-hero {
+        grid-template-columns: 1fr;
+        padding-top: 18px;
+    }
+
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+        margin-bottom: 34px;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .incident-footer .button {
+        max-width: 100%;
+    }
+}

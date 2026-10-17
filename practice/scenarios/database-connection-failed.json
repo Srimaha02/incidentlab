@@ -1,0 +1,56 @@
+
+{
+  "slug": "database-connection-failed",
+  "title": "App cannot connect to the database",
+  "difficulty": "medium",
+  "category": "database",
+  "briefing": "The application deployed successfully, but users receive database errors when loading the dashboard.",
+  "artifacts": {
+    "logs": "django.db.utils.OperationalError: could not connect to server: Connection timed out",
+    "metrics": {
+      "labels": ["10:00", "10:05", "10:10", "10:15", "10:20"],
+      "series": {
+        "http_5xx": [0, 12, 35, 68, 91],
+        "db_connections_failed": [0, 8, 24, 51, 76]
+      },
+      "units": {
+        "http_5xx": "requests",
+        "db_connections_failed": "connections"
+      }
+    },
+    "config": "DATABASE_HOST=old-db.internal\nDATABASE_PORT=5432"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Verify the database hostname, network access, and database availability",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Increase the Gunicorn worker count",
+      "correct": false,
+      "why_wrong": "More application workers do not fix an unreachable database."
+    },
+    {
+      "id": "c",
+      "text": "Disable Django error handling",
+      "correct": false,
+      "why_wrong": "Hiding errors does not restore the database connection."
+    },
+    {
+      "id": "d",
+      "text": "Increase the static files cache duration",
+      "correct": false,
+      "why_wrong": "Static file caching is unrelated to database connectivity."
+    }
+  ],
+  "explanation": "The application cannot establish a connection to the configured database host. The hostname may be outdated, the database may be unavailable, or network rules may block the connection.",
+  "lesson": "Check the database endpoint, port, service availability, and network access before changing application worker settings. Never expose database credentials in logs.",
+  "hints": [
+    "The deployment completed, but database requests are timing out.",
+    "Check the configured database hostname and port.",
+    "Verify database availability and network access from the application environment."
+  ],
+  "points": 100
+}

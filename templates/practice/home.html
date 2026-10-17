@@ -1,50 +1,117 @@
+
 {% extends "base.html" %}
 
-{% block title %}Practice | IncidentLab{% endblock %}
+{% block title %}IncidentLab | DevOps Command Center{% endblock %}
 
 {% block content %}
 
-<h1>Incident Practice</h1>
-
-<p class="muted">
-    Choose an incident and diagnose what went wrong.
-</p>
-
-<div class="scenario-grid">
-
-    {% for scenario in scenarios %}
-
-    <article class="card">
-
-        <div class="card-header">
-            <span class="badge">
-                {{ scenario.difficulty|title }}
-            </span>
-
-            <span class="points">
-                {{ scenario.points }} pts
-            </span>
+<section class="cyber-hero">
+    <div class="hero-content">
+        <div class="terminal-label">
+            <span class="status-dot"></span>
+            INCIDENTLAB / COMMAND CENTER
         </div>
 
-        <h2>{{ scenario.title }}</h2>
+        <h1>Break things.<br><span>Learn to fix them.</span></h1>
 
-        <p>{{ scenario.briefing }}</p>
+        <p class="muted">
+            Practice production incidents, investigate logs,
+            and sharpen your DevOps troubleshooting skills.
+        </p>
 
-        <a
-            class="button"
-            href="{% url 'scenario' scenario.slug %}"
-        >
-            Start Incident
-        </a>
+        <div class="hero-actions">
+            <a class="button" href="#incident-list">Explore incidents ↘</a>
+            <a class="button secondary" href="{% url 'doctor_home' %}">
+                Open DeployDoctor ↗
+            </a>
+        </div>
+    </div>
 
+    <div class="terminal-panel">
+        <div class="terminal-top">
+            <span>●</span><span>●</span><span>●</span>
+            <span class="terminal-name">incidentlab — bash</span>
+        </div>
+        <div class="terminal-body">
+            <p><span class="terminal-prompt">user@incidentlab:~$</span> status --all</p>
+            <p><span class="terminal-green">[READY]</span> Incident engine online</p>
+            <p><span class="terminal-green">[READY]</span> Diagnostics loaded</p>
+            <p><span class="terminal-cyan">[INFO]</span> Choose a scenario to begin</p>
+            <p class="terminal-cursor">_</p>
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-stats">
+    <article class="stat-card">
+        <span class="stat-icon">⌘</span>
+        <p class="muted">AVAILABLE SCENARIOS</p>
+        <strong>{{ scenarios|length }}</strong>
+        <span class="stat-note">Production-inspired cases</span>
     </article>
 
-    {% empty %}
+    <article class="stat-card">
+        <span class="stat-icon">⚡</span>
+        <p class="muted">PRACTICE MODE</p>
+        <strong>ACTIVE</strong>
+        <span class="stat-note">Learn by troubleshooting</span>
+    </article>
 
-    <p>No scenarios found.</p>
+    <article class="stat-card">
+        <span class="stat-icon">↗</span>
+        <p class="muted">CONFIG ANALYSIS</p>
+        <strong>READY</strong>
+        <span class="stat-note">Powered by DeployDoctor</span>
+    </article>
+</section>
 
-    {% endfor %}
+<section id="incident-list" class="incident-section">
+    <div class="section-heading">
+        <div>
+            <div class="terminal-label">
+                <span class="status-dot"></span>
+                TRAINING ENVIRONMENT
+            </div>
+            <h2>Incident scenarios</h2>
+            <p class="muted">Inspect the evidence. Find the root cause.</p>
+        </div>
 
-</div>
+        <span class="scenario-count">
+            {{ scenarios|length }} CASES LOADED
+        </span>
+    </div>
+
+    <div class="scenario-grid">
+        {% for scenario in scenarios %}
+        <article class="card incident-card">
+            <div class="card-header">
+                <span class="badge">{{ scenario.difficulty|title }}</span>
+                <span class="points">{{ scenario.points }} XP</span>
+            </div>
+
+            <div class="incident-index">
+                CASE // {{ forloop.counter|stringformat:"02d" }}
+            </div>
+
+            <h3>{{ scenario.title }}</h3>
+            <p class="incident-briefing">{{ scenario.briefing }}</p>
+
+            <div class="incident-footer">
+                <span class="case-status">
+                    <span class="status-dot"></span> READY TO INVESTIGATE
+                </span>
+                <a class="button" href="{% url 'scenario' scenario.slug %}">
+                    Start investigation →
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        <article class="card">
+            <h3>No scenarios found</h3>
+            <p class="muted">Add scenarios to begin practicing.</p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
 
 {% endblock %}

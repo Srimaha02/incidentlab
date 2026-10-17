@@ -1,0 +1,56 @@
+
+{
+  "slug": "database-migration-failed",
+  "title": "Deployment fails after a schema change",
+  "difficulty": "medium",
+  "category": "database",
+  "briefing": "A new application version deploys, but requests fail because the database is missing a column required by the new code.",
+  "artifacts": {
+    "logs": "django.db.utils.ProgrammingError: column incidents.status does not exist",
+    "metrics": {
+      "labels": ["10:00", "10:05", "10:10", "10:15", "10:20"],
+      "series": {
+        "http_5xx": [0, 2, 18, 42, 65],
+        "deployment_events": [0, 0, 1, 1, 1]
+      },
+      "units": {
+        "http_5xx": "requests",
+        "deployment_events": "events"
+      }
+    },
+    "config": "# Django deployment steps\n1. Install dependencies\n2. Collect static files\n3. Start application\n# Missing step: apply database migrations"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Review pending migrations and apply the required migration safely",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Increase the number of Gunicorn workers",
+      "correct": false,
+      "why_wrong": "Additional workers cannot create a missing database column."
+    },
+    {
+      "id": "c",
+      "text": "Disable all database error reporting",
+      "correct": false,
+      "why_wrong": "Suppressing errors does not bring the schema up to date."
+    },
+    {
+      "id": "d",
+      "text": "Increase the load balancer idle timeout",
+      "correct": false,
+      "why_wrong": "This is a database schema error, not a slow response timeout."
+    }
+  ],
+  "explanation": "The deployed code expects a database column that does not exist. The required schema migration may not have been created or applied.",
+  "lesson": "Check migration status and deploy database schema changes in a controlled order. Back up important data and consider backward compatibility before applying production migrations.",
+  "hints": [
+    "The error identifies a missing database column.",
+    "Compare the database schema with the current application code.",
+    "Check whether the required Django migration was created and applied."
+  ],
+  "points": 100
+}

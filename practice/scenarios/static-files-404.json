@@ -1,0 +1,56 @@
+
+{
+  "slug": "static-files-404",
+  "title": "CSS missing after deployment",
+  "difficulty": "easy",
+  "category": "deployment",
+  "briefing": "The homepage loads successfully after deployment, but the layout appears unstyled because the CSS file returns HTTP 404.",
+  "artifacts": {
+    "logs": "GET /static/css/style.css HTTP/1.1 404 Not Found",
+    "metrics": {
+      "labels": ["10:00", "10:05", "10:10", "10:15", "10:20"],
+      "series": {
+        "http_404": [0, 4, 12, 25, 40],
+        "http_5xx": [0, 0, 0, 0, 0]
+      },
+      "units": {
+        "http_404": "requests",
+        "http_5xx": "requests"
+      }
+    },
+    "config": "# Django static files\nSTATIC_URL = '/static/'\nSTATIC_ROOT = BASE_DIR / 'staticfiles'\n# Deployment must collect static files"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Verify static file paths, run collectstatic, and confirm the static file server configuration",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Increase the Gunicorn worker count",
+      "correct": false,
+      "why_wrong": "More application workers do not fix a missing static file."
+    },
+    {
+      "id": "c",
+      "text": "Change the database password",
+      "correct": false,
+      "why_wrong": "The error is for a CSS file, not a database connection."
+    },
+    {
+      "id": "d",
+      "text": "Disable Django URL routing",
+      "correct": false,
+      "why_wrong": "The static asset path and deployment configuration need to be checked."
+    }
+  ],
+  "explanation": "The browser requests a CSS file that the deployed static-file server cannot find. The file may not have been collected, the path may be incorrect, or the static serving configuration may be wrong.",
+  "lesson": "Check STATIC_URL and STATIC_ROOT, run collectstatic during deployment, and verify the exact asset URL returns HTTP 200.",
+  "hints": [
+    "The homepage works, but the CSS request returns 404.",
+    "Check whether the CSS file exists in the collected static directory.",
+    "Verify collectstatic and the production static-file serving setup."
+  ],
+  "points": 100
+}

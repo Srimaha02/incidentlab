@@ -1,0 +1,56 @@
+
+{
+  "slug": "dependency-version-mismatch",
+  "title": "Application crashes after dependency update",
+  "difficulty": "medium",
+  "category": "deployment",
+  "briefing": "A deployment starts failing immediately after a Python dependency was upgraded.",
+  "artifacts": {
+    "logs": "ImportError: cannot import name 'url_quote' from 'werkzeug.urls'",
+    "metrics": {
+      "labels": ["09:00", "09:05", "09:10", "09:15", "09:20"],
+      "series": {
+        "http_5xx": [0, 0, 35, 70, 90],
+        "deployment_events": [0, 0, 1, 1, 1]
+      },
+      "units": {
+        "http_5xx": "requests",
+        "deployment_events": "events"
+      }
+    },
+    "config": "# requirements.txt\nFlask==2.0.3\nWerkzeug==3.0.1"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Check dependency compatibility and pin compatible package versions",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Increase the instance size immediately",
+      "correct": false,
+      "why_wrong": "The logs show an import error, not resource exhaustion."
+    },
+    {
+      "id": "c",
+      "text": "Disable the load balancer health checks",
+      "correct": false,
+      "why_wrong": "Health checks do not resolve incompatible Python packages."
+    },
+    {
+      "id": "d",
+      "text": "Increase the database connection pool",
+      "correct": false,
+      "why_wrong": "The application fails while importing a dependency."
+    }
+  ],
+  "explanation": "The installed Werkzeug version is incompatible with the application's expected API. The application cannot import the requested symbol.",
+  "lesson": "Review dependency compatibility before upgrades, pin tested versions, and run automated tests before deploying a new release.",
+  "hints": [
+    "The application fails during import.",
+    "Compare the versions of Flask and Werkzeug.",
+    "Check compatibility requirements and test a compatible version combination."
+  ],
+  "points": 100
+}

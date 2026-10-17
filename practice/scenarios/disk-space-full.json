@@ -1,0 +1,56 @@
+
+{
+  "slug": "disk-space-full",
+  "title": "Disk space exhausted",
+  "difficulty": "medium",
+  "category": "linux",
+  "briefing": "The application starts returning errors. Logs stop updating and the instance reports very high disk usage.",
+  "artifacts": {
+    "logs": "OSError: [Errno 28] No space left on device",
+    "metrics": {
+      "labels": ["10:00", "10:05", "10:10", "10:15", "10:20"],
+      "series": {
+        "disk_used_percent": [65, 74, 83, 94, 100],
+        "http_5xx": [0, 0, 4, 28, 67]
+      },
+      "units": {
+        "disk_used_percent": "%",
+        "http_5xx": "requests"
+      }
+    },
+    "config": "# Disk usage snapshot\n/dev/xvda1  100%  /"
+  },
+  "options": [
+    {
+      "id": "a",
+      "text": "Investigate disk usage, safely rotate or clean unnecessary files, and verify available space",
+      "correct": true
+    },
+    {
+      "id": "b",
+      "text": "Increase the Gunicorn worker count",
+      "correct": false,
+      "why_wrong": "More workers will not create additional disk space."
+    },
+    {
+      "id": "c",
+      "text": "Disable the load balancer health check",
+      "correct": false,
+      "why_wrong": "Disabling health checks does not resolve the full disk."
+    },
+    {
+      "id": "d",
+      "text": "Change the database port",
+      "correct": false,
+      "why_wrong": "The error identifies a filesystem capacity problem, not a database connection problem."
+    }
+  ],
+  "explanation": "The root filesystem has reached 100% usage. The application cannot write files, which can cause logging and request failures.",
+  "lesson": "Monitor disk usage and log growth. Identify large files before deleting anything, rotate logs safely, and expand storage if recurring demand requires it.",
+  "hints": [
+    "Look at the operating system error in the logs.",
+    "Check the disk usage metric.",
+    "What does Errno 28 mean when an application tries to write a file?"
+  ],
+  "points": 100
+}
